@@ -16,5 +16,8 @@ DOWNLOAD_DELAY = 2  # Adjust as needed
 RETRY_ENABLED = True
 RETRY_TIMES = 3  # Number of retries for failed requests
 
+DEFAULT_RESPONSE_ENCODING = 'utf-8'
+
+
 # Optional: Log level for debugging
 LOG_LEVEL = 'DEBUG'

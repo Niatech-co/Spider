@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Crawler API</title>
+</head>
+<body>
+    <h1>Welcome to the Web Crawler API</h1>
+    <form id="crawl-form" method="POST" action="/crawl">
+        <label for="keyword">Keyword:</label>
+        <input type="text" id="keyword" name="keyword" required>
+        
+        <label for="location">Location (Language):</label>
+        <select id="location" name="location" required>
+            <option value="" disabled selected>Select a language</option>
+            {% for code, lang in languages.items() %}
+                <option value="{{ code }}">{{ lang }}</option>
+            {% endfor %}
+        </select>
+        
+        <button type="submit">Start Crawl</button>
+    </form>
+    
+    <h2>Status:</h2>
+    <div id="status">Starting crawl...</div>
+    
+    <h2>Results:</h2>
+    <div id="results">No results yet.</div>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Crawl Results</title>
+</head>
+<body>
+    <h1>Crawl Results</h1>
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% elif results %}
+        <ul>
+            {% for result in results %}
+                <li>{{ result.title }} - <a href="{{ result.link }}">{{ result.link }}</a></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No results found.</p>
+    {% endif %}
+    <h2>Raw JSON Data for Debugging:</h2>
+    <pre>{{ results | tojson(indent=2) }}</pre>
+    <a href="/">Start New Crawl</a>
+</body>
+</html>
