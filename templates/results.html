@@ -2,23 +2,60 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Crawl Results</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crawling Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h2 {
+            color: #333333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .card {
+            background-color: #ffffff;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .card h3 {
+            margin: 0;
+            font-size: 18px;
+            color: #4CAF50;
+        }
+        .card a {
+            text-decoration: none;
+            color: #4CAF50;
+        }
+        .card p {
+            font-size: 14px;
+            color: #666666;
+            margin: 5px 0 10px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Crawl Results</h1>
-    {% if error %}
-        <p style="color: red;">{{ error }}</p>
-    {% elif results %}
-        <ul>
+    <div class="container">
+        <h2>Crawling Results</h2>
+        {% if results %}
             {% for result in results %}
-                <li>{{ result.title }} - <a href="{{ result.link }}">{{ result.link }}</a></li>
+            <div class="card">
+                <h3><a href="{{ result.link }}" target="_blank">{{ result.title }}</a></h3>
+                <p>{{ result.snippet }}</p>
+            </div>
             {% endfor %}
-        </ul>
-    {% else %}
-        <p>No results found.</p>
-    {% endif %}
-    <h2>Raw JSON Data for Debugging:</h2>
-    <pre>{{ results | tojson(indent=2) }}</pre>
-    <a href="/">Start New Crawl</a>
+        {% else %}
+            <p>No results found. Please try again.</p>
+        {% endif %}
+    </div>
 </body>
 </html>

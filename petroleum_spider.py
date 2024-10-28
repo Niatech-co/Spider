@@ -1,5 +1,5 @@
+import json
 import scrapy
-from scrapy.http import Request
 
 class PetroleumCompanySpider(scrapy.Spider):
     name = "petroleum_spider"
@@ -19,30 +19,32 @@ class PetroleumCompanySpider(scrapy.Spider):
         self.start_urls = [
             f"https://serpapi.com/search?q={keyword}+companies+in+{location}&api_key={api_key}&num=100"
         ]
+        self.results = []  # Initialize a list to hold results
 
     def parse(self, response):
-        # Check response status before processing
-        if response.status == 403:
-            self.logger.error(f"Access forbidden: {response.url}")
-            return
-        elif response.status != 200:
-            self.logger.error(f"Non-200 status: {response.status}")
+        if response.status != 200:
+            self.logger.error(f"Request failed with status: {response.status}")
             return
 
-        # Parse JSON response for data
+        # Parse JSON response
         json_data = response.json()
         if "organic_results" in json_data:
             for result in json_data["organic_results"]:
-                title = result.get("title", "")
-                link = result.get("link", "")
-                snippet = result.get("snippet", "")
+                self.results.append({
+                    "title": result.get("title", ""),
+                    "link": result.get("link", ""),
+                    "snippet": result.get("snippet", ""),
+                })
 
-                # Yield each extracted item as a dictionary
-                yield {
-                    "title": title,
-                    "link": link,
-                    "snippet": snippet,
-                }
-
+            # Save results after parsing is complete
+            if self.results:
+                save_results(self.results)
         else:
             self.logger.warning("No 'organic_results' found in JSON response")
+
+# Define the save_results function outside of the class
+def save_results(data):
+    # Write only when there's data, avoiding overwriting with empty lists
+    if data:
+        with open("output.json", "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=4)

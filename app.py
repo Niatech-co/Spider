@@ -4,8 +4,10 @@ import subprocess
 import logging
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from dotenv import load_dotenv
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)  # This will allow cross-origin requests
 
 load_dotenv()
 
@@ -45,7 +47,7 @@ def start_crawl(keyword, location_code):
 
     is_crawling = False  # Reset crawling status after successful run
     logger.info("Crawl started successfully.")
-    return jsonify({"status": "success", "message": "Crawl started successfully."}), 202
+    return True
 
 
 @app.route('/')
@@ -65,10 +67,6 @@ def crawl():
     if not keyword or not location_code:
         return jsonify({"status": "error", "message": "Keyword and location are required"}), 400
 
-    # Clear the file before each new crawl
-    with open("output.json", "w") as f:
-        f.write("[]")
-
     is_crawling = True
     success = start_crawl(keyword, location_code)
     is_crawling = False
@@ -79,21 +77,19 @@ def crawl():
     # Redirect to results if successful
     return redirect(url_for('get_results'))
 
-
-
-
 @app.route('/status', methods=['GET'])
 def crawl_status():
     global is_crawling
     return jsonify({"status": "in progress" if is_crawling else "completed"})
 
+
 @app.route('/results', methods=['GET'])
 def get_results():
     try:
-        # Always read the output.json file fresh
+        # Read the output.json file
         if os.path.exists("output.json"):
             with open("output.json", "r", encoding="utf-8") as f:
-                results = json.load(f)
+                results = json.load(f) or []  # Default to empty list if `None`
         else:
             results = []
 
@@ -106,8 +102,5 @@ def get_results():
         return render_template("results.html", results=[], error="An unexpected error occurred.")
 
 
-
-
 if __name__ == "__main__":
-    app.run(debug=True)
-    app.run(host="0.0.0.0", debug=True)
+    app.run(host="127.0.0.1", port=5050, debug=True)
