@@ -1,0 +1,20 @@
+Date: Thu, 31 Oct 2024 07:10:45 GMT
+Content-Type: application/json; charset=utf-8
+X-Frame-Options: SAMEORIGIN
+X-Xss-Protection: 1; mode=block
+X-Content-Type-Options: nosniff
+X-Download-Options: noopen
+X-Permitted-Cross-Domain-Policies: none
+Referrer-Policy: strict-origin-when-cross-origin
+X-Robots-Tag: noindex, nofollow
+Serpapi-Search-Id: 67232d46acf7f8eb0f81810f
+Cache-Control: max-age=3600, public
+Etag: W/"fa91b5bfc62acf5c82a85b092bce7066"
+X-Request-Id: c39653db-239e-475d-98ec-aa0252fcf78e
+X-Runtime: 46.105256
+Cf-Cache-Status: MISS
+Vary: Accept-Encoding
+Server: cloudflare
+Cf-Ray: 8db1d29a0d78e332-IST
+Content-Encoding: br
+Alt-Svc: h3=":443"; ma=86400

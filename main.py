@@ -1,10 +1,12 @@
 # main.py
 import os
 import logging
-from scrapy.crawler import CrawlerProcess
+from scrapy.crawler import CrawlerRunner
+from twisted.internet import reactor
 from petroleum_spider import PetroleumCompanySpider
 from dotenv import load_dotenv
 from deep_translator import GoogleTranslator
+from scrapy.utils.project import get_project_settings
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -28,8 +30,8 @@ def start_crawl(keyword, location):
         logger.error(f"Translation failed: {e}")
         return
 
-    # Setup Scrapy crawler process
-    process = CrawlerProcess(settings={
+    # Setup Scrapy crawler runner
+    runner = CrawlerRunner(settings={
         'FEEDS': {
             "output.json": {"format": "json"},
         },
@@ -48,11 +50,11 @@ def start_crawl(keyword, location):
 
     # Run the crawler
     logger.info("Starting the Scrapy crawler process...")
-    process.crawl(PetroleumCompanySpider, keyword=translated_keyword, location=location, api_key=api_key)
-    process.start()
+    deferred = runner.crawl(PetroleumCompanySpider, keyword=translated_keyword, location=location, api_key=api_key)
+    deferred.addBoth(lambda _: reactor.stop())
+    reactor.run()
     logger.info("Crawler process finished.")
     return True  # Return True if crawl was successful
-
 
 if __name__ == "__main__":
     import argparse
